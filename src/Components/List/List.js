@@ -1,5 +1,6 @@
 import React from 'react'
 import ListEntry from '../ListEntry/ListEntry'
+import './List.css'
 
 export default class List extends React.Component {
     constructor() {
@@ -72,7 +73,16 @@ export default class List extends React.Component {
         }
 
         return (
-            <div>{entryElements}</div>
+            <div className="listContainer">
+                <div className="entry entryTitleContainer">
+                    <span className="entryId entryTitle">ID number</span>
+                    <span className="entryName entryTitle">Name </span>
+                    <span className="entryStatus entryTitle">Status</span>
+                    <span className="entrySupplier entryTitle">Supplier</span>
+                    <span className="entryDate entryTitle">Date</span>
+                </div>
+                {entryElements}
+            </div>
         )
     }
 }
