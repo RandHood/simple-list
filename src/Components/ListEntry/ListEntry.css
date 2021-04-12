@@ -1,0 +1,39 @@
+.entry {
+    display: flex;
+    /* flex-direction: row; */
+    background-color: white;
+    width: 1110px;
+    height: 64px;
+    justify-content: space-between;
+    font-size: 13px;
+    color: gray;
+    border-top: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.entryId {
+    font-family: "Poppins Medium";
+    font-size: 15px;
+    color: black;
+    width: 100px;
+}
+
+.entryName {
+    width: 210px;
+}
+
+.entryStatus {
+    width: 158px;
+}
+
+.entrySupplier {
+    width: 120px;
+}
+
+.entryDate {
+    width: 160px;
+}
+
+.entryId, .entryName, .entryStatus, .entrySupplier, .entryDate {
+    margin: auto;
+}

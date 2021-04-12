@@ -1,3 +1,22 @@
+@font-face {
+  font-family: 'Poppins';
+  src: url('./Assets/Fonts/Poppins/Poppins-Regular.ttf');
+}
+@font-face {
+  font-family: 'Poppins Light';
+  src: url('./Assets/Fonts/Poppins/Poppins-Light.ttf');
+}
+
+@font-face {
+  font-family: 'Poppins Medium';
+  src: url('./Assets/Fonts/Poppins/Poppins-Medium.ttf');
+}
+
+@font-face {
+  font-family: 'Poppins Semibold';
+  src: url('./Assets/Fonts/Poppins/Poppins-SemiBold.ttf');
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +24,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #E5E5E5;
+  font-family: 'Poppins';
+  font-weight: 400;
 }
 
 code {

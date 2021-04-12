@@ -3,7 +3,7 @@ import List from './List/List';
 
 function App() {
   return (
-    <div>
+    <div className="App">
       <List/>
     </div>
   );

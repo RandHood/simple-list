@@ -28,6 +28,7 @@ export default class List extends React.Component {
         var open = XMLHttpRequest.prototype.open;
         XMLHttpRequest.prototype.open = function() {
             var args = slice.call(arguments);
+            // eslint-disable-next-line
             var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
             if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
                 targetOrigin[1] !== cors_api_host) {
@@ -47,14 +48,13 @@ export default class List extends React.Component {
                     retrievedList: results,
                     doneFetching: true,
                 })
-                console.log(this.state.retrievedList)
             }))
     }
     
     render() {
         let entryElements = undefined
         if (this.state.doneFetching !== undefined && this.state.doneFetching) {
-            const orders = [this.state.retrievedList.orders[0]]
+            const orders = this.state.retrievedList.orders
             entryElements = orders.map((entry) =>
                 <ListEntry
                     createdAt={entry.created_at}
