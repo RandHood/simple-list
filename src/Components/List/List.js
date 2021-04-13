@@ -1,5 +1,7 @@
 import React from 'react'
 import ListEntry from '../ListEntry/ListEntry'
+import box_unchecked_icon from './../../Assets/Icons/box_unchecked.svg'
+// import searchIcon from './../../Assets/Icons/search.svg'
 import './List.css'
 
 export default class List extends React.Component {
@@ -17,31 +19,10 @@ export default class List extends React.Component {
             retrievedList: [],
             doneFetching: false,
         })
-        // this.getCorsAccess()
-        // this.createProxy()
         this.getList()
     }
 
-    getCorsAccess() {
-        var cors_api_host = 'cors-anywhere.herokuapp.com';
-        var cors_api_url = 'https://' + cors_api_host + '/';
-        var slice = [].slice;
-        var origin = window.location.protocol + '//' + window.location.host;
-        var open = XMLHttpRequest.prototype.open;
-        XMLHttpRequest.prototype.open = function() {
-            var args = slice.call(arguments);
-            // eslint-disable-next-line
-            var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
-            if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
-                targetOrigin[1] !== cors_api_host) {
-                args[1] = cors_api_url + args[1];
-            }
-            return open.apply(this, args);
-        };
-    }
-
     getList = async() => {
-        // const cors_anywhere = 'https://cors-anywhere.herokuapp.com/'
         const cors_anywhere = 'http://localhost:8080/'
         const url = 'https://o53hpo7bf9.execute-api.us-west-2.amazonaws.com/dev/orders'
         fetch(cors_anywhere + url)
@@ -69,14 +50,23 @@ export default class List extends React.Component {
                     status={entry.status}
                     supplier={entry.supplier}
                     total={entry.total}
-                    key={entry.id}
+                    key={entry.id + entry.created_at}
                 />
             )
         }
 
         return (
             <div className="listContainer">
+                <div className="search">
+                    {/* <div data={searchIcon} className="searchIcon"></div> */}
+                    <input className="searchInput" type="text" placeholder="Search for a contact"></input>
+                </div>
+                <div className="listHeader">
+                    <span className="requestsText">Requests</span>
+                    <span className="requestsText">Sort</span>
+                </div>
                 <div className="entry entryTitleContainer">
+                    <div data={box_unchecked_icon} className="checkbox"></div>
                     <span className="entryId entryTitle">ID number</span>
                     <span className="entryName entryTitle">Name </span>
                     <span className="entryStatus entryTitle">Status</span>
