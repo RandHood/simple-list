@@ -9,15 +9,27 @@ export default class List extends React.Component {
         super()
         this.state = {
             retrievedList: undefined,
+            displayedList: undefined,
             doneFetching: undefined,
+            searchQuery: undefined,
+            sortQuery: undefined,
+            filterQuery: undefined,
         }
         this.getList = this.getList.bind(this)
+        this.handleSearch = this.handleSearch.bind(this)
+        this.handleSort = this.handleSort.bind(this)
+        this.handleFilter = this.handleFilter.bind(this)
+        // this.handleQueries = this.handleQueries.bind(this)
     }
 
     componentDidMount() {
         this.setState({
             retrievedList: [],
+            displayedList: [],
             doneFetching: false,
+            searchQuery: "",
+            sortQuery: undefined,
+            filterQuery: undefined,
         })
         this.getList()
     }
@@ -30,15 +42,51 @@ export default class List extends React.Component {
             .then((results => {
                 this.setState({
                     retrievedList: results,
+                    displayedList: results,
                     doneFetching: true,
                 })
             }))
+    }
+
+    handleSearch(e) {
+        this.setState({searchQuery: e.target.value})
+
+        // this.handleQueries()
+    }
+
+    handleSort() {
+
+        // this.handleQueries()
+    }
+
+    handleFilter() {
+
+        // this.handleQueries()
+    }
+
+    handleQueries() {
+        let displayedList = {
+            orders: this.state.retrievedList.orders
+        }
+        if (this.state.searchQuery !== "") {
+            displayedList.orders = []
+            const searchQuery = this.state.searchQuery.toLowerCase()
+            this.state.retrievedList.orders.forEach(entry => {
+                const name = (entry.customer.fname + " " + entry.customer.lname).toLowerCase()
+                if (name.includes(searchQuery))
+                    displayedList.orders.push(entry)
+            });
+        }
+        // this.setState({displayedList})
+        return displayedList
     }
     
     render() {
         let entryElements = undefined
         if (this.state.doneFetching !== undefined && this.state.doneFetching) {
-            const orders = this.state.retrievedList.orders
+            
+            const orders = this.handleQueries().orders
+            // const orders = this.state.displayedList.orders
             entryElements = orders.map((entry) =>
                 <ListEntry
                     createdAt={entry.created_at}
@@ -59,7 +107,7 @@ export default class List extends React.Component {
             <div className="listContainer">
                 <div className="search">
                     {/* <div data={searchIcon} className="searchIcon"></div> */}
-                    <input className="searchInput" type="text" placeholder="Search for a contact"></input>
+                    <input className="searchInput" placeholder="Search for a contact" onChange={this.handleSearch}></input>
                 </div>
                 <div className="listHeader">
                     <span className="requestsText">Requests</span>
