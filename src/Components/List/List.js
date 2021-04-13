@@ -17,7 +17,8 @@ export default class List extends React.Component {
             retrievedList: [],
             doneFetching: false,
         })
-        this.getCorsAccess()
+        // this.getCorsAccess()
+        // this.createProxy()
         this.getList()
     }
 
@@ -40,7 +41,8 @@ export default class List extends React.Component {
     }
 
     getList = async() => {
-        const cors_anywhere = 'https://cors-anywhere.herokuapp.com/'
+        // const cors_anywhere = 'https://cors-anywhere.herokuapp.com/'
+        const cors_anywhere = 'http://localhost:8080/'
         const url = 'https://o53hpo7bf9.execute-api.us-west-2.amazonaws.com/dev/orders'
         fetch(cors_anywhere + url)
             .then(res => res.json())
