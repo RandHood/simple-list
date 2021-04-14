@@ -16,11 +16,14 @@ export default class List extends React.Component {
             searchQuery: undefined,
             sortQuery: "",
             filterQuery: "",
+            currentPage: undefined,
         }
         this.getList = this.getList.bind(this)
         this.handleSearch = this.handleSearch.bind(this)
         this.handleSort = this.handleSort.bind(this)
         this.handleFilter = this.handleFilter.bind(this)
+        this.previousPage = this.previousPage.bind(this)
+        this.nextPage = this.nextPage.bind(this)
         // this.handleQueries = this.handleQueries.bind(this)
     }
 
@@ -32,6 +35,7 @@ export default class List extends React.Component {
             searchQuery: "",
             sortQuery: "id",
             filterQuery: "",
+            currentPage: 1,
         })
         this.getList()
     }
@@ -79,17 +83,27 @@ export default class List extends React.Component {
     }
 
     handleSearch(e) {
-        this.setState({searchQuery: e.target.value})
-
+        this.setState({
+            searchQuery: e.target.value,
+            currentPage: 1,
+        })
         // this.handleQueries()
     }
 
     handleSort(e) {
-        this.setState({sortQuery: e.target.value})
+        this.setState({
+            sortQuery: e.target.value,
+            currentPage: 1,
+        })
+        // this.handleQueries()
     }
 
     handleFilter(e) {
-        this.setState({filterQuery: e.target.value})
+        this.setState({
+            filterQuery: e.target.value,
+            currentPage: 1,
+        })
+        // this.handleQueries()
     }
 
     handleQueries() {
@@ -127,17 +141,52 @@ export default class List extends React.Component {
             }
         }
 
-        // this.setState({displayedList})
+        // this.setState({ displayedList })
         return displayedList
+    }
+
+    previousPage() {
+        this.setState({ currentPage: this.state.currentPage - 1 })
+    }
+
+    nextPage() {
+        this.setState({ currentPage: this.state.currentPage + 1 })
+    }
+
+    paginatedOrders(orders) {
+        let pageOrders = []
+        let i = 0
+        const page = this.state.currentPage
+        const maxPage = Math.ceil(orders.length / 8)
+        let lastIndex = page * 8
+
+        // console.log(maxPage);
+
+        if (page === maxPage) {
+            lastIndex = orders.length
+        }
+
+        while (((page * 8) - 8 + i) < lastIndex) {
+            const index = (page * 8) - 8 + i
+            pageOrders.push(orders[index])
+            i += 1
+        }
+
+        return pageOrders
     }
     
     render() {
         let entryElements = undefined
+        let leftButton = <button className="pagination-btn pagination-btn-disabled left-btn-disabled"></button>
+        let rightButton = <button className="pagination-btn pagination-btn-disabled right-btn-disabled"></button>
+        let maxPage = 1
+
         if (this.state.doneFetching !== undefined && this.state.doneFetching) {
-            
+            // this.handleQueries()
             const orders = this.handleQueries().orders
+            const pageOrders = this.paginatedOrders(orders)
             // const orders = this.state.displayedList.orders
-            entryElements = orders.map((entry) =>
+            entryElements = pageOrders.map((entry) =>
                 <ListEntry
                     created_at={entry.created_at}
                     email={entry.customer.email}
@@ -151,6 +200,13 @@ export default class List extends React.Component {
                     // key={entry.id + entry.created_at}
                 />
             )
+
+            maxPage = Math.ceil(orders.length / 8)
+
+            if (this.state.currentPage > 1)
+                leftButton = <button className="pagination-btn left-btn" onClick={this.previousPage}></button>
+            if (this.state.currentPage < maxPage)
+                rightButton = <button className="pagination-btn right-btn" onClick={this.nextPage}></button>
         }
 
         return (
@@ -189,7 +245,6 @@ export default class List extends React.Component {
                             </Select>
                         </div>
                     </div>
-                    {/* <InputLabel id="demo-simple-select-helper-label">Age</InputLabel> */}
                 </div>
                 <div className="entry entryTitleContainer">
                     <div data={box_unchecked_icon} className="checkbox"></div>
@@ -200,6 +255,13 @@ export default class List extends React.Component {
                     <span className="entryDate entryTitle">Date</span>
                 </div>
                 {entryElements}
+                <div className="pagination">
+                    {leftButton}
+                    {rightButton}
+                    {/* <button className="pagination-btn left-btn"></button> */}
+                    {/* <button className="pagination-btn pagination-btn-disabled left-btn-disabled"></button> */}
+                    {/* <button className="pagination-btn right-btn"></button> */}
+                </div>
             </div>
         )
     }

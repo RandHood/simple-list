@@ -74,3 +74,45 @@
     background: var(--icon-gray);
     margin: auto 24px;
 }
+
+.pagination {
+    display: flex;
+    width: 150px;
+    margin: 24px auto;
+}
+
+.pagination-btn {
+    width: 24px;
+    height: 24px;
+    background-size: cover;
+    border: none;
+    background-color: inherit;
+}
+
+.pagination-btn:hover {
+    cursor: pointer;
+}
+
+.pagination-btn-disabled:hover {
+    cursor: default;
+}
+
+.pagination-btn:focus {
+    outline: none;
+}
+
+.left-btn {
+    background-image: url("../../Assets/Icons/left_arrow.png");
+}
+
+.right-btn {
+    background-image: url("../../Assets/Icons/right_arrow.png");
+}
+
+.left-btn-disabled {
+    background-image: url("../../Assets/Icons/left_arrow_disabled.png");
+}
+
+.right-btn-disabled {
+    background-image: url("../../Assets/Icons/right_arrow_disabled.png");
+}
