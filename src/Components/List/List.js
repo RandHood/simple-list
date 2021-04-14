@@ -3,7 +3,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListEntry from '../ListEntry/ListEntry'
 import box_unchecked_icon from './../../Assets/Icons/box_unchecked.svg'
-// import searchIcon from './../../Assets/Icons/search.svg'
+import search_icon from './../../Assets/Icons/search.png'
 import './List.css'
 
 export default class List extends React.Component {
@@ -184,22 +184,24 @@ export default class List extends React.Component {
         if (this.state.doneFetching !== undefined && this.state.doneFetching) {
             // this.handleQueries()
             const orders = this.handleQueries().orders
-            const pageOrders = this.paginatedOrders(orders)
-            // const orders = this.state.displayedList.orders
-            entryElements = pageOrders.map((entry) =>
-                <ListEntry
-                    created_at={entry.created_at}
-                    email={entry.customer.email}
-                    firstName={entry.customer.fname}
-                    lastName={entry.customer.lname}
-                    gender={entry.customer.gender}
-                    id={entry.id}
-                    status={entry.status}
-                    supplier={entry.supplier}
-                    total={entry.total}
-                    // key={entry.id + entry.created_at}
-                />
-            )
+            if (orders.length > 0) {
+                const pageOrders = this.paginatedOrders(orders)
+                // const orders = this.state.displayedList.orders
+                entryElements = pageOrders.map((entry) =>
+                    <ListEntry
+                        created_at={entry.created_at}
+                        email={entry.customer.email}
+                        firstName={entry.customer.fname}
+                        lastName={entry.customer.lname}
+                        gender={entry.customer.gender}
+                        id={entry.id}
+                        status={entry.status}
+                        supplier={entry.supplier}
+                        total={entry.total}
+                        // key={entry.id + entry.created_at}
+                    />
+                )
+            }
 
             maxPage = Math.ceil(orders.length / 8)
 
@@ -213,6 +215,7 @@ export default class List extends React.Component {
             <div className="listContainer">
                 <div className="search">
                     {/* <div data={searchIcon} className="searchIcon"></div> */}
+                    <img src={search_icon} className="searchIcon" alt=""/>
                     <input className="searchInput" placeholder="Search for a contact" onChange={this.handleSearch}></input>
                 </div>
                 <div className="listHeader">
