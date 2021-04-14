@@ -22,11 +22,21 @@
 
 .requestsText {
     width: 146px;
-    color: var(--black);
-    font-family: "Poppins Medium";
-    font-weight: 14px;
     margin: auto 0;
+}
 
+.queriesContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.filterContainer {
+    /* padding: 0 5px; */
+    margin: auto 20px;
+}
+
+.select {
+    width: 200px;
 }
 
 .listHeader {
@@ -35,6 +45,9 @@
     justify-content: space-between;
     width: 100%;
     height: 64px;
+    color: var(--black);
+    font-family: "Poppins Medium";
+    font-weight: 14px;
 }
 
 .search {

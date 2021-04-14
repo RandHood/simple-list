@@ -1,4 +1,6 @@
 import React from 'react'
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import ListEntry from '../ListEntry/ListEntry'
 import box_unchecked_icon from './../../Assets/Icons/box_unchecked.svg'
 // import searchIcon from './../../Assets/Icons/search.svg'
@@ -12,8 +14,8 @@ export default class List extends React.Component {
             displayedList: undefined,
             doneFetching: undefined,
             searchQuery: undefined,
-            sortQuery: undefined,
-            filterQuery: undefined,
+            sortQuery: "",
+            filterQuery: "",
         }
         this.getList = this.getList.bind(this)
         this.handleSearch = this.handleSearch.bind(this)
@@ -28,8 +30,8 @@ export default class List extends React.Component {
             displayedList: [],
             doneFetching: false,
             searchQuery: "",
-            sortQuery: undefined,
-            filterQuery: undefined,
+            sortQuery: "id",
+            filterQuery: "",
         })
         this.getList()
     }
@@ -48,26 +50,51 @@ export default class List extends React.Component {
             }))
     }
 
+    compareDate(order1, order2) {
+        const date1 = new Date(order1.created_at)
+        const date2 = new Date(order2.created_at)
+
+        if (date1 < date2){
+            return -1;
+        }
+
+        if ( date1 > date2 ){
+            return 1;
+        }
+        return 0;
+    }
+
+    compareId(order1, order2) {
+        const id1 = order1.id
+        const id2 = order2.id
+
+        if (id1 < id2){
+            return -1;
+        }
+
+        if ( id1 > id2 ){
+            return 1;
+        }
+        return 0;
+    }
+
     handleSearch(e) {
         this.setState({searchQuery: e.target.value})
 
         // this.handleQueries()
     }
 
-    handleSort() {
-
-        // this.handleQueries()
+    handleSort(e) {
+        this.setState({sortQuery: e.target.value})
     }
 
-    handleFilter() {
-
-        // this.handleQueries()
+    handleFilter(e) {
+        this.setState({filterQuery: e.target.value})
     }
 
     handleQueries() {
-        let displayedList = {
-            orders: this.state.retrievedList.orders
-        }
+        let displayedList = { orders: this.state.retrievedList.orders }
+
         if (this.state.searchQuery !== "") {
             displayedList.orders = []
             const searchQuery = this.state.searchQuery.toLowerCase()
@@ -77,6 +104,29 @@ export default class List extends React.Component {
                     displayedList.orders.push(entry)
             });
         }
+
+        if (this.state.filterQuery !== "") {
+            let filteredList = { orders: [] }
+            displayedList.orders.forEach(entry => {
+                if (entry.status === this.state.filterQuery)
+                    filteredList.orders.push(entry)
+            });
+            displayedList.orders = filteredList.orders
+        }
+
+        if (this.state.sortQuery !== "") {
+            if (this.state.sortQuery === "id") {
+                displayedList.orders.sort(this.compareId)
+            }
+            else if (this.state.sortQuery === "date_newest") {
+                displayedList.orders.sort(this.compareDate)
+                displayedList.orders.reverse()
+            }
+            else if (this.state.sortQuery === "date_oldest") {
+                displayedList.orders.sort(this.compareDate)
+            }
+        }
+
         // this.setState({displayedList})
         return displayedList
     }
@@ -89,7 +139,7 @@ export default class List extends React.Component {
             // const orders = this.state.displayedList.orders
             entryElements = orders.map((entry) =>
                 <ListEntry
-                    createdAt={entry.created_at}
+                    created_at={entry.created_at}
                     email={entry.customer.email}
                     firstName={entry.customer.fname}
                     lastName={entry.customer.lname}
@@ -98,7 +148,7 @@ export default class List extends React.Component {
                     status={entry.status}
                     supplier={entry.supplier}
                     total={entry.total}
-                    key={entry.id + entry.created_at}
+                    // key={entry.id + entry.created_at}
                 />
             )
         }
@@ -111,7 +161,35 @@ export default class List extends React.Component {
                 </div>
                 <div className="listHeader">
                     <span className="requestsText">Requests</span>
-                    <span className="requestsText">Sort</span>
+                    <div className="queriesContainer">
+                        <div className="filterContainer">
+                            <span>Sort by &nbsp;&nbsp;</span>
+                            <Select
+                                className="select"
+                                value={this.state.sortQuery}
+                                onChange={this.handleSort}
+                                displayEmpty
+                            >
+                                <MenuItem value="id">ID Number</MenuItem>
+                                <MenuItem value="date_newest">Date: Newest</MenuItem>
+                                <MenuItem value="date_oldest">Date: Oldest</MenuItem>
+                            </Select>
+                        </div>
+                        <div className="filterContainer">
+                            <span>Filter by &nbsp;&nbsp;</span>
+                            <Select
+                                className="select"
+                                value={this.state.filterQuery}
+                                onChange={this.handleFilter}
+                                displayEmpty
+                            >
+                                <MenuItem value="">None</MenuItem>
+                                <MenuItem value="confirmed">Confirmed</MenuItem>
+                                <MenuItem value="pending_confirmation">Pending Confirmation</MenuItem>
+                            </Select>
+                        </div>
+                    </div>
+                    {/* <InputLabel id="demo-simple-select-helper-label">Age</InputLabel> */}
                 </div>
                 <div className="entry entryTitleContainer">
                     <div data={box_unchecked_icon} className="checkbox"></div>

@@ -8,8 +8,8 @@ export default function ListEntry(props) {
     const style = status === 'Pending Confirmation' ? "entryPending" : "entry"
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    const createdAt = new Date(props.createdAt)
-    const dateText = monthNames[createdAt.getMonth()] + " " + createdAt.getDate() + ", " + createdAt.getHours() + ":" + createdAt.getMinutes() + ", " + createdAt.getFullYear();
+    const created_at = new Date(props.created_at)
+    const dateText = monthNames[created_at.getMonth()] + " " + created_at.getDate() + ", " + created_at.getHours() + ":" + created_at.getMinutes() + ", " + created_at.getFullYear();
 
     return (
         <div className={style}>
