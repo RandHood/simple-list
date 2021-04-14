@@ -58,13 +58,14 @@ export default class List extends React.Component {
         const date1 = new Date(order1.created_at)
         const date2 = new Date(order2.created_at)
 
-        if (date1 < date2){
+        if (date1 < date2) {
             return -1;
         }
 
-        if ( date1 > date2 ){
+        if (date1 > date2) {
             return 1;
         }
+
         return 0;
     }
 
@@ -72,13 +73,14 @@ export default class List extends React.Component {
         const id1 = order1.id
         const id2 = order2.id
 
-        if (id1 < id2){
+        if (id1 < id2) {
             return -1;
         }
 
-        if ( id1 > id2 ){
+        if (id1 > id2) {
             return 1;
         }
+
         return 0;
     }
 
@@ -87,7 +89,6 @@ export default class List extends React.Component {
             searchQuery: e.target.value,
             currentPage: 1,
         })
-        // this.handleQueries()
     }
 
     handleSort(e) {
@@ -95,7 +96,6 @@ export default class List extends React.Component {
             sortQuery: e.target.value,
             currentPage: 1,
         })
-        // this.handleQueries()
     }
 
     handleFilter(e) {
@@ -103,7 +103,6 @@ export default class List extends React.Component {
             filterQuery: e.target.value,
             currentPage: 1,
         })
-        // this.handleQueries()
     }
 
     handleQueries() {
@@ -141,7 +140,6 @@ export default class List extends React.Component {
             }
         }
 
-        // this.setState({ displayedList })
         return displayedList
     }
 
@@ -159,8 +157,6 @@ export default class List extends React.Component {
         const page = this.state.currentPage
         const maxPage = Math.ceil(orders.length / 8)
         let lastIndex = page * 8
-
-        // console.log(maxPage);
 
         if (page === maxPage) {
             lastIndex = orders.length
@@ -182,11 +178,9 @@ export default class List extends React.Component {
         let maxPage = 1
 
         if (this.state.doneFetching !== undefined && this.state.doneFetching) {
-            // this.handleQueries()
             const orders = this.handleQueries().orders
             if (orders.length > 0) {
                 const pageOrders = this.paginatedOrders(orders)
-                // const orders = this.state.displayedList.orders
                 entryElements = pageOrders.map((entry) =>
                     <ListEntry
                         created_at={entry.created_at}
@@ -214,7 +208,6 @@ export default class List extends React.Component {
         return (
             <div className="listContainer">
                 <div className="search">
-                    {/* <div data={searchIcon} className="searchIcon"></div> */}
                     <img src={search_icon} className="searchIcon" alt=""/>
                     <input className="searchInput" placeholder="Search for a contact" onChange={this.handleSearch}></input>
                 </div>
@@ -261,9 +254,6 @@ export default class List extends React.Component {
                 <div className="pagination">
                     {leftButton}
                     {rightButton}
-                    {/* <button className="pagination-btn left-btn"></button> */}
-                    {/* <button className="pagination-btn pagination-btn-disabled left-btn-disabled"></button> */}
-                    {/* <button className="pagination-btn right-btn"></button> */}
                 </div>
             </div>
         )
