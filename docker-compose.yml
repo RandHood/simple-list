@@ -1,0 +1,12 @@
+version: '3'
+services:
+    app:
+        build: .
+        depends_on:
+            - 'cors'
+        ports:
+            - '3000:3000'
+    cors:
+        build: cors-anywhere/
+        ports:
+            - '8080:8080'
