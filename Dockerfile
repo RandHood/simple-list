@@ -11,12 +11,13 @@ FROM node:14
 WORKDIR /usr/src/app
 
 # Install app dependencies
-COPY package*.json ./
 COPY /cors-anywhere/package*.json ./
-
+RUN npm install
+COPY package*.json ./
 RUN npm install
 
 # Bundle app source
 COPY . .
 
-CMD ["node", "./cors-anywhere/server.js", "&", "npm", "start"]
+CMD node ./cors-anywhere/server.js & npm start
+# CMD ["node", "./cors-anywhere/server.js", "&", "npm", "start"]
