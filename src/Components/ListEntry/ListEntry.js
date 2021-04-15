@@ -3,7 +3,6 @@ import box_unchecked_icon from './../../Assets/Icons/box_unchecked.svg'
 import './ListEntry.css'
 
 export default function ListEntry(props) {
-
     const status = props.status === 'confirmed' ? 'Confirmed' : props.status === 'pending_confirmation' ? 'Pending Confirmation' : 'Rejected'
     const style = status === 'Pending Confirmation' ? "entryPending" : "entry"
 

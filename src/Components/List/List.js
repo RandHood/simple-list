@@ -24,10 +24,10 @@ export default class List extends React.Component {
         this.handleFilter = this.handleFilter.bind(this)
         this.previousPage = this.previousPage.bind(this)
         this.nextPage = this.nextPage.bind(this)
-        // this.handleQueries = this.handleQueries.bind(this)
     }
 
     componentDidMount() {
+        // setting initial state
         this.setState({
             retrievedList: [],
             displayedList: [],
@@ -40,7 +40,9 @@ export default class List extends React.Component {
         this.getList()
     }
 
+    // this function fetches the orders from the api provided and saves the data in the state
     getList = async() => {
+        // since the api responds with missing headers we forward it to cors-anywhere to get those headers in the response
         const cors_anywhere = 'http://localhost:8080/'
         const url = 'https://o53hpo7bf9.execute-api.us-west-2.amazonaws.com/dev/orders'
         fetch(cors_anywhere + url)
@@ -54,6 +56,7 @@ export default class List extends React.Component {
             }))
     }
 
+    // comparing array objects based on order dates
     compareDate(order1, order2) {
         const date1 = new Date(order1.created_at)
         const date2 = new Date(order2.created_at)
@@ -69,6 +72,7 @@ export default class List extends React.Component {
         return 0;
     }
 
+    // comparing array objects based on order id
     compareId(order1, order2) {
         const id1 = order1.id
         const id2 = order2.id
@@ -84,6 +88,7 @@ export default class List extends React.Component {
         return 0;
     }
 
+    // saving the new search input in the state
     handleSearch(e) {
         this.setState({
             searchQuery: e.target.value,
@@ -91,6 +96,7 @@ export default class List extends React.Component {
         })
     }
 
+    // saving the new sort input in the state
     handleSort(e) {
         this.setState({
             sortQuery: e.target.value,
@@ -98,6 +104,7 @@ export default class List extends React.Component {
         })
     }
 
+    // saving the new filter input in the state
     handleFilter(e) {
         this.setState({
             filterQuery: e.target.value,
@@ -105,19 +112,24 @@ export default class List extends React.Component {
         })
     }
 
+    // this function returns a list with the orders that satisfy the search, sort and filter inputs
     handleQueries() {
         let displayedList = { orders: this.state.retrievedList.orders }
 
+        // handling the search query
         if (this.state.searchQuery !== "") {
             displayedList.orders = []
+            // formatting the query to lower case
             const searchQuery = this.state.searchQuery.toLowerCase()
             this.state.retrievedList.orders.forEach(entry => {
+                // fornmatting the customer name to lowercase
                 const name = (entry.customer.fname + " " + entry.customer.lname).toLowerCase()
                 if (name.includes(searchQuery))
                     displayedList.orders.push(entry)
             });
         }
 
+        // handling the filter query
         if (this.state.filterQuery !== "") {
             let filteredList = { orders: [] }
             displayedList.orders.forEach(entry => {
@@ -127,12 +139,14 @@ export default class List extends React.Component {
             displayedList.orders = filteredList.orders
         }
 
+        // handling the sort query
         if (this.state.sortQuery !== "") {
             if (this.state.sortQuery === "id") {
                 displayedList.orders.sort(this.compareId)
             }
             else if (this.state.sortQuery === "date_newest") {
                 displayedList.orders.sort(this.compareDate)
+                // reversing the array since it returns from oldest to newest
                 displayedList.orders.reverse()
             }
             else if (this.state.sortQuery === "date_oldest") {
@@ -151,17 +165,21 @@ export default class List extends React.Component {
         this.setState({ currentPage: this.state.currentPage + 1 })
     }
 
+    // this function takes an array of orders and return an array with maximum 8 orders based on the current page the user is viewing
     paginatedOrders(orders) {
         let pageOrders = []
         let i = 0
         const page = this.state.currentPage
+        // calculating max page that a user can reach
         const maxPage = Math.ceil(orders.length / 8)
+        
+        // getting last index for the page, if the user is in the last page it has to be the last index in the orders array
         let lastIndex = page * 8
-
         if (page === maxPage) {
             lastIndex = orders.length
         }
 
+        // ((page * 8) - 8 + i) will get the index within a certain page
         while (((page * 8) - 8 + i) < lastIndex) {
             const index = (page * 8) - 8 + i
             pageOrders.push(orders[index])
@@ -172,14 +190,17 @@ export default class List extends React.Component {
     }
     
     render() {
+        // setting initial HTML elements
         let entryElements = undefined
         let leftButton = <button className="pagination-btn pagination-btn-disabled left-btn-disabled"></button>
         let rightButton = <button className="pagination-btn pagination-btn-disabled right-btn-disabled"></button>
         let maxPage = 1
 
         if (this.state.doneFetching !== undefined && this.state.doneFetching) {
+            // get the new orders based on the queries
             const orders = this.handleQueries().orders
             if (orders.length > 0) {
+                // get the orders for the current page and map each one into a ListEntry
                 const pageOrders = this.paginatedOrders(orders)
                 entryElements = pageOrders.map((entry) =>
                     <ListEntry
@@ -197,8 +218,10 @@ export default class List extends React.Component {
                 )
             }
 
+            // calculating max page that a user can reach
             maxPage = Math.ceil(orders.length / 8)
 
+            // setting previous and next buttons enabled if there are availabe pages
             if (this.state.currentPage > 1)
                 leftButton = <button className="pagination-btn left-btn" onClick={this.previousPage}></button>
             if (this.state.currentPage < maxPage)
