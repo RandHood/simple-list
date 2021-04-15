@@ -4,12 +4,20 @@ FROM node:14
 WORKDIR /usr/src/app
 
 # Install app dependencies
-COPY /cors-anywhere/package*.json ./
-RUN npm install
 COPY package*.json ./
 RUN npm install
+
+COPY ./cors-anywhere/package*.json ./cors-anywhere/
+RUN npm --prefix ./cors-anywhere install ./cors-anywhere
 
 # Bundle app source
 COPY . .
 
-CMD node ./cors-anywhere/server.js & npm start
+# Install cors-anywhere dependencies
+# COPY ./cors-anywhere/package*.json ./
+# RUN npm install
+
+EXPOSE 8080
+
+CMD ./start.sh
+# CMD node ./cors-anywhere/server.js & npm start
